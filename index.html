@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Multiplayer card game</title>
+    </head>
+
+    <body>
+        <h1>Multiplayer card game</h1>
+        <p id="status">Connecting...</p>
+
+        <form id="message-form">
+            <input
+                id="message-input"
+                type="text"
+                placeholder="Enter a message"
+                autoComplete="off"
+            >
+
+            <button type="submit">send</button>
+        </form>
+
+        <ul id="messages"></ul>
+
+        <script type="module" src="/src/client.ts"></script>
+    
+    </body>
+
+</html>

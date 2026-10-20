@@ -26,7 +26,7 @@ socket.addEventListener("message", (event) => {
     const item = document.createElement("li");
 
     item.textContent = event.data;
-
+    console.log("Received: " + event.data);
     messages.appendChild(item);
 });
 

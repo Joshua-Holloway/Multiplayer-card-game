@@ -1,4 +1,7 @@
-import type {ClientMessage} from "./protocol";
+import type {
+    ClientMessage,
+    ServerMessage
+} from "./protocol";
 
 console.log("Client loaded");
 
@@ -55,7 +58,7 @@ form.addEventListener("submit", (event) => {
     };
 
     socket.send(JSON.stringify(message))
-    
+
     input.value = "";
 });
 

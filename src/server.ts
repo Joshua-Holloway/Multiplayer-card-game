@@ -32,7 +32,7 @@ server.on('connection', (socket) => {
         const text = data.toString();
 
         console.log('Received: ' + text);
-
+        
         const message = JSON.parse(text) as ClientMessage
 
         switch (message.type){
@@ -45,10 +45,20 @@ server.on('connection', (socket) => {
                 } else{
                     const id = randomUUID();
                     playerIdBySocket.set(socket, id);
+                    
+                    // add player to players if player doesnt already exist
+                    players.push({
+                        id: id,
+                        name: message.name,
+                        coins: 0
+                    });
+
                     sendMessage(socket, {
                         type: "welcome",
                         playerId: id
                     });
+
+                    broadcastGameState();
                 }
                 break;
             
@@ -77,5 +87,28 @@ function broadcast(message: ServerMessage): void {
         if (client.readyState === WebSocket.OPEN){
             sendMessage(client, message);
         }
+    });
+}
+
+function getGameState(): GameState{
+    if (players.length === 0){
+        var currentGameState: GameState = {
+            players: players,
+            currentPlayerId: null
+        };
+    } else{
+        var currentGameState: GameState = {
+            players: players,
+            currentPlayerId: players[currentPlayerIndex].id
+        };
+    }
+
+    return currentGameState;
+}
+
+function broadcastGameState(): void{
+    broadcast({
+        type: "state",
+        state: getGameState()
     });
 }

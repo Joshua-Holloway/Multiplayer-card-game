@@ -1,3 +1,5 @@
+import type {ClientMessage} from "./protocol";
+
 console.log("Client loaded");
 
 const statusElement =
@@ -13,7 +15,7 @@ const messages =
     document.querySelector<HTMLUListElement>("#messages");
 
 if (!statusElement || !form || !input || !messages){
-    throw new Error("Required HTML elements couldnt not be found");
+    throw new Error("Required HTML elements could not be found");
 }
 
 const socket = new WebSocket("ws://localhost:3000");
@@ -41,14 +43,19 @@ socket.addEventListener("error", (event) => {
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     
-    const message = input.value.trim();
+    const name = input.value.trim();
 
-    if (message.length === 0){
+    if (name.length === 0){
         return;
     }
 
-    socket.send(message);
+    const message: ClientMessage = {
+        type: "join",
+        name: name
+    };
 
+    socket.send(JSON.stringify(message))
+    
     input.value = "";
 });
 

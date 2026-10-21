@@ -64,6 +64,27 @@ server.on('connection', (socket) => {
             
             case "take_coin":
                 console.log("Take coin requested");
+                let coin_id = playerIdBySocket.get(socket);
+                if(coin_id === undefined){
+                    sendMessage(socket, {
+                        type: "error",
+                        message: "You have not joined"
+                    });
+                }
+
+                else if(players.length > 0){
+                    let current_player = players[currentPlayerIndex];
+                    if(current_player.id != coin_id){
+                        sendMessage(socket, {
+                            type: "error",
+                            message: "It is not your turn"
+                        });
+                    } else {
+                        current_player.coins += 1;
+                        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                        broadcastGameState();
+                    }
+                }
                 break;
 
         }

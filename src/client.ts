@@ -17,7 +17,10 @@ const input =
 const messages = 
     document.querySelector<HTMLUListElement>("#messages");
 
-if (!statusElement || !form || !input || !messages){
+const takeCoinButton =
+    document.querySelector<HTMLButtonElement>("#take_coin_button");
+
+if (!statusElement || !form || !input || !messages || !takeCoinButton){
     throw new Error("Required HTML elements could not be found");
 }
 
@@ -52,13 +55,20 @@ form.addEventListener("submit", (event) => {
         return;
     }
 
-    const message: ClientMessage = {
+    sendMessage({
         type: "join",
         name: name
-    };
-
-    socket.send(JSON.stringify(message))
+    });
 
     input.value = "";
 });
 
+takeCoinButton.addEventListener("click", () => {
+    sendMessage({
+        type: "take_coin"
+    });
+});
+
+function sendMessage(message: ClientMessage): void {
+    socket.send(JSON.stringify(message));
+}
